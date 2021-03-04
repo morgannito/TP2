@@ -34,10 +34,20 @@ public abstract class Piece implements Movable {
      * @throws IllegalMove throws an exception if the piece move is illegal
      */
     public void move(Coord c) throws IllegalMove, IllegalPosition {
+        if (isValidMove(c)){
+            board.setOccupation(place, null);
+            setPlace(c);
+            board.setOccupation(c, this);
+        } else {
+            throw new IllegalMove("illegal move");
+        }
+
 
     }
 
-    public boolean correctPath(Coord start, Coord end) throws IllegalPosition {
+    protected abstract boolean isValidMove(Coord c) throws IllegalPosition;
+
+    protected boolean correctPath(Coord start, Coord end) throws IllegalPosition {
 
         int stepX = (int) Math.signum(end.x - start.x);
         int stepY = (int) Math.signum(end.y - start.y);

@@ -55,12 +55,11 @@ public class ChessBoard {
      */
 
     public void setOccupation(Coord pos, Movable in) throws IllegalPosition {
-
-        if (pos.x < 7 && pos.y < 7 && pos.x >= 0 && pos.y >= 0) {
-            cases[pos.x][pos.y].setPiece(in);
-        } else {
-            throw new IllegalPosition( "Out of chessboard position");
-        }
+            if (pos.x < 8 && pos.y < 8 && pos.x >= 0 && pos.y >= 0) {
+                cases[pos.x][pos.y].setPiece(in);
+            } else {
+                throw new IllegalPosition("Out of chessboard position");
+            }
     }
 
     /**

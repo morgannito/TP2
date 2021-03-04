@@ -32,6 +32,7 @@ public class Pawn extends Piece {
      * Piece movement rule : can only move in front of him 1 by 1, can move 2 cases on his first move
      * @param c new coordinate position
      */
+    /*
     public void move(Coord c) {
         try{
         //    if (!board.isOccupied(c)){
@@ -56,6 +57,22 @@ public class Pawn extends Piece {
         }catch (Exception e) {
             e.printStackTrace();
         }
+    }*/
+
+    @Override
+    protected boolean isValidMove(Coord c) {
+        try {
+            if (((col==Color.WHITE)&&(c.x == place.x + 1)&&(c.y == place.y))||((col==Color.BLACK)&&(c.x == place.x - 1)&&(c.y == place.y))){
+                return true;
+            }else if((((firstMove)&&(col==Color.WHITE)&&(c.x == place.x + 2)&&(c.y == place.y))||((firstMove)&&(col==Color.BLACK)&&(c.x == place.x - 2)&&(c.y == place.y)))) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     @Override

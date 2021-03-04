@@ -1,23 +1,24 @@
 package appli;
 
-import game.Case;
+import game.*;
+import game.boardException.IllegalMove;
 import game.boardException.IllegalPosition;
 import game.chessPiece.*;
-import game.ChessBoard;
-import game.Color;
-import game.Coord;
+import java.util.Scanner;
 
 /**
  * Test class
  */
 public class Tp1ex3 {
 
+        static Color currentPlayer = Color.WHITE;
+
         /**
          * Main class used for the test
          * @param args used for in-line arguments,take no arguments
          * @throws IllegalPosition error in case of illegal position
-         //myBoard = {ChessBoard@462}*/
-        public static void main(String[] args) throws IllegalPosition {
+        //myBoard = {ChessBoard@462}*/
+        public static void main(String[] args) throws IllegalPosition, IllegalMove {
 
                 //Case[][] chess = new Case[8][8];
 
@@ -35,32 +36,47 @@ public class Tp1ex3 {
 
                 Rook myRook2 = new Rook(new Coord(1, 3), Color.BLACK, myBoard);
 
-               // String move1 =
+                String move1 = "11 12";
 
-                myBoard.smartPrint();
-
-                myRook.move(new Coord(1,2));
-
-                myBoard.smartPrint();
-
-                myRook.move(new Coord(1,4));
+                System.out.println("Player turn : \n"+ currentPlayer);
 
                 myBoard.smartPrint();
 
 
-                //out of range move
-       //         Coord myMove2 = new Coord(-3, -3);
-       //         myBishop.move(myMove2);
-       //         myBoard.smartPrint();
+                while (true){
+                        System.out.print("Enter a string (xy xy) : ");
+                        Scanner scanner = new Scanner(System. in);
+                        String inputString = scanner. nextLine();
 
-                //illegal move
-       //         Coord myMove3 = new Coord(5, 5);
-       //         myBishop.move(myMove3);
-       //         myBoard.smartPrint();
+                        assistedMove(inputString, myBoard);
+                        System.out.println("Player turn : \n"+ currentPlayer);
 
-                //legal move
-       //         Coord myMove4 = new Coord(2, 2);
-       //         myBishop.move(myMove4);
-       //         myBoard.smartPrint();
+                        myBoard.smartPrint();
+                }
+
+        }
+
+        //revoir encpsulation cases board
+
+        public static void assistedMove(String userInput, ChessBoard board) throws IllegalMove, IllegalPosition {
+                String[] parts = userInput.split(" ");
+                String[] posPieceStart = parts[0].split("");
+                String[] posPieceArrived = parts[1].split("");
+
+                Piece pieceToMove = (Piece) board.cases[Integer.parseInt(posPieceStart[0])-1][Integer.parseInt(posPieceStart[1])-1].getPiece();
+                if (pieceToMove != null){
+                        if (pieceToMove.getCol() == currentPlayer){
+                                try {
+                                        pieceToMove.move(new Coord(Integer.parseInt(posPieceArrived[0]),Integer.parseInt(posPieceArrived[1])));
+                                                if (currentPlayer == Color.WHITE){
+                                                        currentPlayer = Color.BLACK;
+                                                } else {
+                                                        currentPlayer = Color.WHITE;
+                                                }
+                                } catch (Exception e){
+                                        e.printStackTrace();
+                                }
+                        }
+                }
         }
 }

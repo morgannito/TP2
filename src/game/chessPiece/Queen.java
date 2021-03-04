@@ -29,6 +29,7 @@ public class Queen extends Piece {
      * Piece movement rule : move like a rook or bishop
      * @param c new coordinate position
      */
+    /*
     public void move(Coord c) {
         try {
         //    if (!board.isOccupied(c)){
@@ -45,6 +46,21 @@ public class Queen extends Piece {
         }catch (Exception e) {
             e.printStackTrace();
         }
+    }*/
+
+    @Override
+    protected boolean isValidMove(Coord c) {
+        try {
+            if (((c.x != place.x)&&(c.y == place.y))||((c.x == place.x)&&(c.y != place.y ))||abs(place.x - c.x) == abs(place.y - c.y)){
+                if (correctPath(place,c))
+                    return true;
+            }else {
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     @Override

@@ -29,22 +29,14 @@ public class Bishop extends Piece {
      * Piece movement rule : diagonal move only
      * @param c new coordinate position
      */
-    public void move(Coord c){
-        try {
-          //  if (!board.isOccupied(c)){
-                if(abs(place.x - c.x) == abs(place.y - c.y)) {
-                    if (correctPath(this.place, c)) {
-                        board.setOccupation(place, null);
-                        setPlace(c);
-                        board.setOccupation(c, this);
-                    }
-                } else {
-                    throw new IllegalMove("Bishop illegal move");
-                }
-         //   }
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
+
+    @Override
+    protected boolean isValidMove(Coord c) throws IllegalPosition {
+            if (abs(place.x - c.x) == abs(place.y - c.y)){
+                if (correctPath(place,c))
+                    return true;
+            }
+            return false;
     }
 
     @Override

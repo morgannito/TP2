@@ -25,9 +25,10 @@ public class Rook extends Piece {
 
     /**
      * Piece movement rule : horizontal and vertical move only
-     * @param c new coordinate position
+     //* @param c new coordinate position
      */
 
+    /*
     public void move(Coord c) {
         try{
                 if (((c.x != place.x)&&(c.y == place.y))||((c.x == place.x)&&(c.y != place.y ))){
@@ -44,10 +45,19 @@ public class Rook extends Piece {
         }catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     @Override
     public String toString(){
         return col == Color.WHITE ? " ♖ " : " ♜ ";
+    }
+
+    @Override
+    protected boolean isValidMove(Coord c) throws IllegalPosition {
+            if (((c.x != place.x)&&(c.y == place.y))||((c.x == place.x)&&(c.y != place.y ))){
+                if (correctPath(place,c))
+                    return true;
+            }
+                return false;
     }
 }
