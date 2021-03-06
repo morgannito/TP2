@@ -55,11 +55,11 @@ public class ChessBoard {
      */
 
     public void setOccupation(Coord pos, Movable in) throws IllegalPosition {
-            if (pos.x < 8 && pos.y < 8 && pos.x >= 0 && pos.y >= 0) {
-                cases[pos.x][pos.y].setPiece(in);
-            } else {
-                throw new IllegalPosition("Out of chessboard position");
-            }
+        if (pos.x < 8 && pos.y < 8 && pos.x >= 0 && pos.y >= 0) {
+            cases[pos.x][pos.y].setPiece(in);
+        } else {
+            throw new IllegalPosition("Out of chessboard position");
+        }
     }
 
     /**
@@ -78,7 +78,7 @@ public class ChessBoard {
             }
             System.out.println("");
         }
-        System.out.println("  1  2  3  4  5  6  7  8");
+        System.out.println("  a   b  c   d   e  f   g   h");
     }
 
     /*
