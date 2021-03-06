@@ -24,7 +24,7 @@ public class Tp2 {
      * @throws IllegalPosition error in case of illegal position
      *                         //myBoard = {ChessBoard@462}
      */
-    public static void main(String[] args) throws IllegalPosition, IllegalMove {
+    public static void main(String[] args) throws IllegalPosition, IllegalMove, IOException, ClassNotFoundException {
 
         //Construction d’un objet de type ChessBoard
         ChessBoard myBoard = new ChessBoard();
@@ -66,16 +66,46 @@ public class Tp2 {
             System.out.print("Enter a string (xy xy) : ");
             Scanner scanner = new Scanner(System.in);
             String inputString = scanner.nextLine();
-            assistedMove(inputString, myBoard);
-            save(inputString);
-            System.out.println("Player turn : \n" + currentPlayer);
-            myBoard.smartPrint();
+            if (inputString.equals("s")){
+                save(myBoard);
+            }else if (inputString.equals("l")){
+                myBoard= load();
+                System.out.println("Player turn : "+ myBoard.getCurrentPlayer());
+                myBoard.smartPrint();
+            } else {
+                assistedMove(inputString, myBoard);
+                saveTxt(inputString);
+                System.out.println("Player turn : \n" + currentPlayer);
+                myBoard.smartPrint();
+            }
         }
-
     }
 
 
-    public static void save(String posi) {
+
+    public static void save(ChessBoard board){
+        try {
+            FileOutputStream fileOut = new FileOutputStream("saveGame.ser");
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(board);
+            out.close();
+            fileOut.close();
+            System.out.println("Serialized data is saved in "+fileOut);
+        } catch (IOException i) {
+            i.printStackTrace();
+        }
+    }
+
+    public static ChessBoard load() throws IOException, ClassNotFoundException {
+
+        FileInputStream fi = new FileInputStream(new File("saveGame.ser"));
+        ObjectInputStream oi = new ObjectInputStream(fi);
+        System.out.println("Serialized data loaded in ");
+
+        return (ChessBoard) oi.readObject();
+    }
+
+    public static void saveTxt(String posi) {
         try {
 
             File myFile = new File("NouvellePartie.txt");
@@ -115,8 +145,8 @@ public class Tp2 {
         String[] posPieceStart = parts[0].split("");
         String[] posPieceArrived = parts[1].split("");
 
-        Piece pieceToMove = (Piece) board.cases[Integer.parseInt(posPieceStart[0]) - 1][Integer.parseInt(posPieceStart[1]) - 1].getPiece();
-        if (pieceToMove != null) {
+        Piece pieceToMove = (Piece) board.getPiece(Integer.parseInt(posPieceStart[0])-1,Integer.parseInt(posPieceStart[1])-1);
+         if (pieceToMove != null) {
             if (pieceToMove.getCol() == currentPlayer) {
                 try {
                     pieceToMove.move(new Coord(Integer.parseInt(posPieceArrived[0]), Integer.parseInt(posPieceArrived[1])));

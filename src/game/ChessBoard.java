@@ -1,24 +1,35 @@
 package game;
 import game.boardException.IllegalPosition;
 
+import java.io.Serializable;
+
 /**
  *Chessboard used to play
  */
-public class ChessBoard {
+public class ChessBoard implements Serializable {
 
-    public Case[][] cases;
+    private final Case[][] cases;
+    private Color currentPlayer;
 
+    public Color getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public void nextTurn() {
+        if (this.currentPlayer == Color.WHITE){
+            this.currentPlayer = Color.BLACK;
+        } else {
+            this.currentPlayer = Color.WHITE;
+        }
+    }
     /**
      *Chessboard constructor, define the Chessboard dimension.
      // * @param cases Number of cases in rows and column
      */
-    //public ChessBoard(Case[][] cases) {
-    //    this.cases = cases;
-    //}
 
     public ChessBoard() {
         this.cases = new Case[8][8];
-
+        this.currentPlayer = Color.WHITE;
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 this.cases[j][i] = new Case();
@@ -26,6 +37,9 @@ public class ChessBoard {
         }
     }
 
+    public Movable getPiece(int x, int y){
+        return cases[x][y].getPiece();
+    }
 
     /**
      *Check if the position is occupied
@@ -38,13 +52,6 @@ public class ChessBoard {
             throw new IllegalPosition("Out of range chessboard");
         }
         return this.cases[pos.x][pos.y].isOccupied();
-        /*
-        if (cases[pos.x][pos.y].isOccupied()) {
-                return true;
-            } else {
-                return false;
-            }
-         */
     }
 
 
@@ -78,21 +85,6 @@ public class ChessBoard {
             }
             System.out.println("");
         }
-        System.out.println("  a   b  c   d   e  f   g   h");
+        System.out.println("  1  2  3  4  5  6  7  8");
     }
-
-    /*
-    public void smartPrint() {
-        for (int i = 8; i > 0; i--) {
-            for (int j = 0; j < 8; j++) {
-                if (this.cases[i - 1][j].isOccupied() == true) {
-                    System.out.print(" " + this.cases[i - 1][j].getPiece() + " ");
-                } else {
-                    System.out.print(" □ ");
-                }
-            }
-        }
-    }
-
-     */
 }
