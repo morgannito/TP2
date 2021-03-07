@@ -73,7 +73,7 @@ public class Tp2 {
     public static void saveTxt(String posi) {
         try {
             deplacement.add(posi);
-            File myFile = new File("./save/NouvellePartie.txt");
+            File myFile = new File("./save/oldGame.txt");
             FileWriter fw = new FileWriter(myFile);
             if (myFile.createNewFile()) {
                 System.out.println("Le fichier est créé.");
@@ -137,7 +137,7 @@ public class Tp2 {
                     assistedMove(inputString, myBoard);
                     saveTxt(inputString);
                 }catch (IllegalMove | IllegalPosition move ){
-                    System.out.println("erreur mouvemevent non sauvegarder" + move);
+                    System.out.println("Erreur mouvemevent non sauvegarder" + move);
                 }
             }
         }
@@ -180,7 +180,7 @@ public class Tp2 {
 
 
     public static void replayTxt(ChessBoard board) {
-            File myFile = new File("./save/NouvellePartie.txt");
+            File myFile = new File("./save/oldGame.txt");
             try {
                 InputStream game = new FileInputStream(myFile);
                 InputStreamReader gameReader = new InputStreamReader(game);
