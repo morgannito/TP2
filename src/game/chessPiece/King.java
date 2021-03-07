@@ -6,7 +6,6 @@ import game.Coord;
 import game.Piece;
 import game.boardException.IllegalPosition;
 
-import static java.lang.Math.abs;
 
 /**
  * King chess piece
@@ -58,7 +57,7 @@ public class King extends Piece {
 
     /**
      * Used for the human display
-     * @return TODO
+     * @return
      */
     @Override
     public String toString(){

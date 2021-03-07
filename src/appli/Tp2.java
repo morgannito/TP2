@@ -1,6 +1,9 @@
 package appli;
 
-import game.*;
+import game.ChessBoard;
+import game.Color;
+import game.Coord;
+import game.Piece;
 import game.boardException.IllegalMove;
 import game.boardException.IllegalPosition;
 import game.chessPiece.*;
@@ -10,12 +13,12 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * Test class
+ * Tp2
  */
 public class Tp2 {
 
     static Color currentPlayer = Color.WHITE;
-    static ArrayList<String> deplacement = new ArrayList<String>();
+    static ArrayList<String> deplacement = new ArrayList<>();
 
     /**
      * Main class used for the test
@@ -24,7 +27,7 @@ public class Tp2 {
      * @throws IllegalPosition error in case of illegal position
      *
      */
-    public static void main(String[] args) throws IllegalPosition, IllegalMove, IOException, ClassNotFoundException {
+    public static void main(String[] args) throws IllegalPosition, IOException, ClassNotFoundException {
         //Construction d’un objet de type ChessBoard
         ChessBoard myBoard = new ChessBoard();
         initBoard(myBoard);
@@ -35,24 +38,22 @@ public class Tp2 {
         Scanner scannerstart = new Scanner(System.in);
         String inputStringstart = scannerstart.nextLine();
 
-
         if (inputStringstart.equals("play")){
             startGame(myBoard);
         } if (inputStringstart.equals("replay")){
             System.out.println("Revoir les movement du fichier texte");
+            replayTxt(myBoard);
         }if (inputStringstart.equals("load")){
             System.out.println("Continue la partie");
-
+            myBoard= load();
+            startGame(myBoard);
         }
-
-
     }
-
 
 
     public static void save(ChessBoard board){
         try {
-            FileOutputStream fileOut = new FileOutputStream("saveOne.ser");
+            FileOutputStream fileOut = new FileOutputStream("./save/saveOne.ser");
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
             out.writeObject(board);
             out.close();
@@ -64,18 +65,15 @@ public class Tp2 {
     }
 
     public static ChessBoard load() throws IOException, ClassNotFoundException {
-
-        FileInputStream fi = new FileInputStream(new File("saveOne.ser"));
+        FileInputStream fi = new FileInputStream("./save/saveOne.ser");
         ObjectInputStream oi = new ObjectInputStream(fi);
-        System.out.println("Serialized data loaded in ");
-
         return (ChessBoard) oi.readObject();
     }
 
     public static void saveTxt(String posi) {
         try {
             deplacement.add(posi);
-            File myFile = new File("NouvellePartie.txt");
+            File myFile = new File("./save/NouvellePartie.txt");
             FileWriter fw = new FileWriter(myFile);
             if (myFile.createNewFile()) {
                 System.out.println("Le fichier est créé.");
@@ -108,16 +106,12 @@ public class Tp2 {
         Piece pieceToMove = (Piece) board.getPiece(Integer.parseInt(posPieceStart[0])-1,Integer.parseInt(posPieceStart[1])-1);
          if (pieceToMove != null) {
             if (pieceToMove.getCol() == currentPlayer) {
-                try {
                     pieceToMove.move(new Coord(Integer.parseInt(posPieceArrived[0]), Integer.parseInt(posPieceArrived[1])));
                     if (currentPlayer == Color.WHITE) {
                         currentPlayer = Color.BLACK;
                     } else {
                         currentPlayer = Color.WHITE;
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
             } else {
                 if (currentPlayer == Color.WHITE) {
                     System.out.println("You are " + currentPlayer + " not  Black");
@@ -129,6 +123,25 @@ public class Tp2 {
         }
     }
 
+    public static void startGame(ChessBoard myBoard) throws IOException, ClassNotFoundException {
+        while (true) {
+            myBoard.smartPrint();
+            System.out.println("Player turn : \n" + currentPlayer);
+            System.out.println("Input s for save");
+            Scanner scanner = new Scanner(System.in);
+            String inputString = scanner.nextLine();
+            if (inputString.equals("s")){
+                save(myBoard);
+            } else {
+                try{
+                    assistedMove(inputString, myBoard);
+                    saveTxt(inputString);
+                }catch (IllegalMove | IllegalPosition move ){
+                    System.out.println("erreur mouvemevent non sauvegarder" + move);
+                }
+            }
+        }
+    }
 
     public static void initBoard(ChessBoard myBoard)throws IllegalPosition{
         Rook myRook = new Rook(new Coord(1, 1), Color.WHITE, myBoard);
@@ -164,26 +177,24 @@ public class Tp2 {
         Pawn Pawn15 = new Pawn(new Coord(7, 7), Color.BLACK, myBoard);
         Pawn Pawn16 = new Pawn(new Coord(7, 8), Color.BLACK, myBoard);
     }
-    public static void startGame(ChessBoard myBoard) throws IOException, ClassNotFoundException, IllegalMove, IllegalPosition {
-        while (true) {
-            myBoard.smartPrint();
-            System.out.println("Player turn : \n" + currentPlayer);
-            System.out.print("Enter a string (xy xy) : ");
-            Scanner scanner = new Scanner(System.in);
-            String inputString = scanner.nextLine();
-            if (inputString.equals("s")){
-                save(myBoard);
-            }else if (inputString.equals("l")){
-                myBoard= load();
-                System.out.println("Player turn : "+ myBoard.getCurrentPlayer());
-                myBoard.smartPrint();
-            } else {
-                assistedMove(inputString, myBoard);
-                saveTxt(inputString);
-                System.out.println("Player turn : \n" + currentPlayer);
-                myBoard.smartPrint();
-            }
-        }
-    }
 
+
+    public static void replayTxt(ChessBoard board) {
+            File myFile = new File("./save/NouvellePartie.txt");
+            try {
+                InputStream game = new FileInputStream(myFile);
+                InputStreamReader gameReader = new InputStreamReader(game);
+                BufferedReader reader = new BufferedReader(gameReader);
+                String ligne;
+                while ((ligne = reader.readLine()) != null) {
+                    System.out.println(ligne);
+                    assistedMove(ligne,board);
+                    board.smartPrint();
+                }
+                reader.close();
+            } catch (Exception e) {
+                System.out.println(e.toString());
+            }
+    }
 }
+
