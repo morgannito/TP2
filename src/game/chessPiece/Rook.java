@@ -27,25 +27,6 @@ public class Rook extends Piece {
      //* @param c new coordinate position
      */
 
-    /*
-    public void move(Coord c) {
-        try{
-                if (((c.x != place.x)&&(c.y == place.y))||((c.x == place.x)&&(c.y != place.y ))){
-                    if (correctPath(place, c)) {
-                        //for (int i1 = place.x; i1 != place.x; )
-                        board.setOccupation(place, null);
-                        setPlace(c);
-                        board.setOccupation(c, this);
-                    }
-                } else {
-                    throw new IllegalMove("Rook illegal move");
-                }
-        //    }
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
-    }*/
-
     @Override
     public String toString(){
         return col == Color.WHITE ? " ♖ " : " ♜ ";

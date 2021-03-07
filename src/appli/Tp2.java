@@ -97,7 +97,6 @@ public class Tp2 {
         }
     }
 
-    // Revoir encpsulation cases board
     public static void assistedMove(String userInput, ChessBoard board) throws IllegalMove, IllegalPosition {
         String[] parts = userInput.split(" ");
         String[] posPieceStart = parts[0].split("");
